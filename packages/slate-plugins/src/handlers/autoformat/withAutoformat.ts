@@ -12,6 +12,17 @@ import { WithAutoformatOptions } from './types';
  * Enables support for autoformatting actions.
  * Once a markup rule is validated, it does not check the following rules.
  */
+
+ 
+const isMarkupInTextFromBlockStart = (markups: string[], text: string) => {
+  for (const markup of markups) {
+    if (text.includes(markup)) {
+      return true
+    }
+  }
+  return false
+}
+
 export const withAutoformat = ({ rules }: WithAutoformatOptions) => <
   T extends Editor
 >(
@@ -45,7 +56,7 @@ export const withAutoformat = ({ rules }: WithAutoformatOptions) => <
 
       const valid = () => insertTrigger && insertText(text);
 
-      if (markups.includes(textFromBlockStart)) {
+      if (isMarkupInTextFromBlockStart(markups, textFromBlockStart)) {
         // Start of the block
         autoformatBlock(editor, type, rangeFromBlockStart, {
           preFormat,
@@ -81,3 +92,4 @@ export const withAutoformat = ({ rules }: WithAutoformatOptions) => <
 
   return editor;
 };
+
