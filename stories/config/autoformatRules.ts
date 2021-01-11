@@ -7,7 +7,7 @@ import {
   toggleList,
   unwrapList,
 } from '@udecode/slate-plugins';
-import { Editor } from 'slate';
+import { Editor, Transforms } from 'slate';
 import { options } from './initialValues';
 
 const preFormat = (editor: Editor) => unwrapList(editor, options);
@@ -67,6 +67,12 @@ export const autoformatRules: AutoformatRule[] = [
     type: options.blockquote.type,
     markup: ['>'],
     preFormat,
+    format: (editor) => {
+      Transforms.wrapNodes(editor, {
+        type: options.blockquote.type,
+        children: [{text: ''}]
+      })
+    }
   },
   {
     type: MARK_BOLD,
